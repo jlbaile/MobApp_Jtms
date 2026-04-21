@@ -108,7 +108,7 @@ public class StaffFragment extends Fragment {
         // Load current fare price
         RequestQueue fareQueue = Volley.newRequestQueue(requireContext());
         StringRequest fareRequest = new StringRequest(Request.Method.GET,
-                "http://192.168.100.30/crud-android-jtms/fareget.php",
+                AppConfig.BASE_URL + "fareget.php",
                 response -> etFarePrice.setText(response.trim()),
                 error -> Log.e("VolleyError", error.toString())
         );
@@ -123,7 +123,7 @@ public class StaffFragment extends Fragment {
             }
             RequestQueue queue = Volley.newRequestQueue(requireContext());
             StringRequest updateRequest = new StringRequest(Request.Method.POST,
-                    "http://192.168.100.30/crud-android-jtms/fareupdate.php",
+                    AppConfig.BASE_URL + "fareupdate.php",
                     response -> {
                         if (response.trim().equals("success")) {
                             Toast.makeText(requireContext(), "Fare Updated Successfully!", Toast.LENGTH_SHORT).show();

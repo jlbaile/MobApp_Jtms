@@ -112,7 +112,7 @@ public class JeepneyFragment extends Fragment {
             final String capacity = etCapacity.getText().toString();
 
             RequestQueue queue = Volley.newRequestQueue(requireContext());
-            String url = "http://192.168.100.30/crud-android-jtms/jeepneycreate.php";
+            String url = AppConfig.BASE_URL + "jeepneycreate.php";
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     response -> {

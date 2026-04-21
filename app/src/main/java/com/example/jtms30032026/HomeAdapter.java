@@ -70,7 +70,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         holder.btnDepartReturn.setOnClickListener(v -> {
             if (jeepney.getStatus().equals("IN TERMINAL")) {
-                String url = "http://192.168.100.30/crud-android-jtms/tripdepart.php";
+                String url = AppConfig.BASE_URL + "tripdepart.php";
 
                 RequestQueue queue = Volley.newRequestQueue(v.getContext());
                 StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -95,7 +95,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
             } else {
                 Log.d("TripDebug", "Sending trip_id: " + jeepney.getActive_trip_id() + " jeepney_id: " + jeepney.getJeepney_id());
-                String url = "http://192.168.100.30/crud-android-jtms/tripreturn.php";
+                String url = AppConfig.BASE_URL + "tripreturn.php";
                 RequestQueue queue = Volley.newRequestQueue(v.getContext());
                 StringRequest request = new StringRequest(Request.Method.POST, url,
                         response -> {
