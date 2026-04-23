@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/dialog_rounded_bg">
+
+    <!-- ── Dialog Header ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <!-- Jeepney icon circle -->
+        <FrameLayout
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/circle_light_green"
+            android:layout_marginEnd="12dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_jeepney"
+                app:tint="#1B4332" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Vehicle"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#1A1A1A" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update jeepney details"
+                android:textSize="12sp"
+                android:textColor="#888888" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE"
+        android:layout_marginBottom="18dp" />
+
+    <!-- Driver Name Label -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Driver Name"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:textColor="#555555"
+        android:layout_marginBottom="6dp" />
+
+    <!-- ID kept: etEditDriverName -->
+    <EditText
+        android:id="@+id/etEditDriverName"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Enter driver name"
+        android:textSize="14sp"
+        android:textColor="#1A1A1A"
+        android:textColorHint="#BBBBBB"
+        android:background="@drawable/input_rounded_bg"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:inputType="textPersonName"
+        android:autofillHints="name"
+        android:layout_marginBottom="14dp" />
+
+    <!-- Plate + Capacity side by side -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="22dp">
+
+        <!-- Plate Number -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Plate Number"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:textColor="#555555"
+                android:layout_marginBottom="6dp" />
+
+            <!-- ID kept: etEditPlateNumber -->
+            <EditText
+                android:id="@+id/etEditPlateNumber"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="ABC-1234"
+                android:textSize="14sp"
+                android:textColor="#1A1A1A"
+                android:textColorHint="#BBBBBB"
+                android:background="@drawable/input_rounded_bg"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:inputType="textCapCharacters"
+                android:autofillHints="off" />
+
+        </LinearLayout>
+
+        <!-- Capacity -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Capacity"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:textColor="#555555"
+                android:layout_marginBottom="6dp" />
+
+            <!-- ID kept: etEditCapacity -->
+            <EditText
+                android:id="@+id/etEditCapacity"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="20"
+                android:textSize="14sp"
+                android:textColor="#1A1A1A"
+                android:textColorHint="#BBBBBB"
+                android:background="@drawable/input_rounded_bg"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:inputType="number"
+                android:autofillHints="off" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCancelEdit"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textSize="14sp"
+            android:textColor="#555555"
+            android:background="@drawable/btn_outline_grey_rounded"
+            android:stateListAnimator="@null"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/btnSaveEdit"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Save Changes"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:background="@drawable/btn_dark_green_rounded"
+            android:stateListAnimator="@null"
+            app:backgroundTint="@null"
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
