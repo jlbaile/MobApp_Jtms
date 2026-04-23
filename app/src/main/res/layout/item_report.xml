@@ -4,40 +4,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="2dp">
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="14dp">
+        android:padding="16dp">
 
-        <!-- Top row: plate + capacity -->
+        <!-- Top row: plate number + capacity badge -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="2dp">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
 
             <TextView
                 android:id="@+id/tvReportPlate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="16sp"
+                android:textSize="17sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
-                android:text="Plate"/>
+                android:textColor="#1A1A1A"
+                android:text="ABC-1234"/>
 
+            <!-- Capacity badge -->
             <TextView
                 android:id="@+id/tvReportCapacity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textColor="#888"
-                android:text="Cap: 0"/>
+                android:text="Cap: 21"
+                android:textSize="11sp"
+                android:textColor="#1B4332"
+                android:background="@drawable/badge_green_outline"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"/>
+
         </LinearLayout>
 
         <!-- Driver name -->
@@ -46,9 +55,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="13sp"
-            android:textColor="#555"
-            android:layout_marginBottom="10dp"
-            android:text="Driver"/>
+            android:textColor="#666666"
+            android:layout_marginBottom="14dp"
+            android:text="Juan dela Cruz"/>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F0F0F0"
+            android:layout_marginBottom="12dp"/>
 
         <!-- Stats row -->
         <LinearLayout
@@ -68,16 +84,24 @@
                     android:layout_height="wrap_content"
                     android:text="Trips"
                     android:textSize="11sp"
-                    android:textColor="#888"/>
+                    android:textColor="#888888"/>
                 <TextView
                     android:id="@+id/tvReportTrips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    android:textColor="#1A73E8"
-                    android:text="0"/>
+                    android:textColor="#1A1A1A"
+                    android:text="0"
+                    android:layout_marginTop="2dp"/>
             </LinearLayout>
+
+            <!-- Vertical divider -->
+            <View
+                android:layout_width="1dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:background="#F0F0F0"/>
 
             <!-- Passengers -->
             <LinearLayout
@@ -89,18 +113,26 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Est. Passengers"
+                    android:text="Passengers"
                     android:textSize="11sp"
-                    android:textColor="#888"/>
+                    android:textColor="#888888"/>
                 <TextView
                     android:id="@+id/tvReportPassengers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    android:textColor="#1A1A2E"
-                    android:text="0"/>
+                    android:textColor="#1A1A1A"
+                    android:text="0"
+                    android:layout_marginTop="2dp"/>
             </LinearLayout>
+
+            <!-- Vertical divider -->
+            <View
+                android:layout_width="1dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:background="#F0F0F0"/>
 
             <!-- Revenue -->
             <LinearLayout
@@ -114,15 +146,16 @@
                     android:layout_height="wrap_content"
                     android:text="Revenue"
                     android:textSize="11sp"
-                    android:textColor="#888"/>
+                    android:textColor="#888888"/>
                 <TextView
                     android:id="@+id/tvReportRevenue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#2E7D32"
-                    android:text="₱0.00"/>
+                    android:textColor="#1B4332"
+                    android:text="₱0.00"
+                    android:layout_marginTop="2dp"/>
             </LinearLayout>
 
         </LinearLayout>

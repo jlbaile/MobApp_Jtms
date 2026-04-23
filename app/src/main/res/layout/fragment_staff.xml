@@ -4,174 +4,393 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
+    android:background="#F5F5F5"
+    android:fillViewport="true"
     tools:context=".StaffFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <!-- Header Title -->
-        <TextView
-            android:id="@+id/tvStaffTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Staff Management"
-            android:textColor="#000000"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <!-- First Name Input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutStaffFirstName"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:hint="First Name"
-            app:layout_constraintTop_toBottomOf="@id/tvStaffTitle">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etStaffFirstName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Last Name Input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutStaffLastName"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Last Name"
-            app:layout_constraintTop_toBottomOf="@id/layoutStaffFirstName">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etStaffLastName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Username Input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutStaffUsername"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Username"
-            app:layout_constraintTop_toBottomOf="@id/layoutStaffLastName">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etStaffUsername"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Password Input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutStaffPassword"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Password"
-            app:passwordToggleEnabled="true"
-            app:layout_constraintTop_toBottomOf="@id/layoutStaffUsername">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etStaffPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Submit Button -->
-        <Button
-            android:id="@+id/btnStaffSubmit"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="24dp"
-            android:text="SUBMIT STAFF"
-            app:layout_constraintTop_toBottomOf="@id/layoutStaffPassword" />
-
-        <!-- Search Bar -->
-        <androidx.appcompat.widget.SearchView
+        <!-- ══════════════════════════════════════ -->
+        <!--  SEARCH BAR                          -->
+        <!-- ══════════════════════════════════════ -->
+        <EditText
             android:id="@+id/svStaff"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:background="#F1F1F1"
-            app:iconifiedByDefault="false"
-            app:queryHint="Search Staff Name..."
-            app:layout_constraintTop_toBottomOf="@id/btnStaffSubmit" />
+            android:layout_height="48dp"
+            android:hint="Search staff or departments..."
+            android:textSize="13sp"
+            android:textColor="#1A1A1A"
+            android:textColorHint="#AAAAAA"
+            android:background="@drawable/search_rounded_bg"
+            android:paddingStart="44dp"
+            android:paddingEnd="14dp"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="4dp"
+            android:inputType="text"
+            android:layout_marginBottom="20dp" />
 
-        <!-- List Header -->
-        <TextView
-            android:id="@+id/tvStaffListHeader"
-            android:layout_width="wrap_content"
+        <!-- ══════════════════════════════════════ -->
+        <!--  ADD STAFF CARD                      -->
+        <!-- ══════════════════════════════════════ -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Staff Directory"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/svStaff"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF">
 
-        <!-- RecyclerView -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Card Title -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Staff"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A1A1A"
+                    android:layout_marginBottom="18dp" />
+
+                <!-- First Name + Last Name row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="14dp">
+
+                    <!-- First Name -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="First Name"
+                            android:textSize="12sp"
+                            android:textColor="#555555"
+                            android:layout_marginBottom="6dp" />
+
+                        <EditText
+                            android:id="@+id/etFirstName"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:hint="Jane"
+                            android:textSize="14sp"
+                            android:textColor="#1A1A1A"
+                            android:textColorHint="#BBBBBB"
+                            android:background="@drawable/input_rounded_bg"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp"
+                            android:inputType="textPersonName"
+                            android:autofillHints="givenName" />
+
+                    </LinearLayout>
+
+                    <!-- Last Name -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Last Name"
+                            android:textSize="12sp"
+                            android:textColor="#555555"
+                            android:layout_marginBottom="6dp" />
+
+                        <EditText
+                            android:id="@+id/etLastName"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:hint="Doe"
+                            android:textSize="14sp"
+                            android:textColor="#1A1A1A"
+                            android:textColorHint="#BBBBBB"
+                            android:background="@drawable/input_rounded_bg"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp"
+                            android:inputType="textPersonName"
+                            android:autofillHints="familyName" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Username Label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:textSize="12sp"
+                    android:textColor="#555555"
+                    android:layout_marginBottom="6dp" />
+
+                <!-- Username Input with @ icon -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="14dp">
+
+                    <EditText
+                        android:id="@+id/etUsername"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:hint="jane.doe.staff"
+                        android:textSize="14sp"
+                        android:textColor="#1A1A1A"
+                        android:textColorHint="#BBBBBB"
+                        android:background="@drawable/input_rounded_bg"
+                        android:paddingStart="40dp"
+                        android:paddingEnd="14dp"
+                        android:inputType="text"
+                        android:autofillHints="username" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="14dp"
+                        android:text="@"
+                        android:textSize="15sp"
+                        android:textColor="#888888"
+                        android:textStyle="bold" />
+
+                </FrameLayout>
+
+                <!-- Password Label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Password"
+                    android:textSize="12sp"
+                    android:textColor="#555555"
+                    android:layout_marginBottom="6dp" />
+
+                <!-- Password Input with lock icon -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutPassword"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    app:passwordToggleEnabled="true"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxStrokeColor="#E0E0E0"
+                    app:boxBackgroundColor="#F2F2F2"
+                    app:startIconDrawable="@drawable/ic_lock"
+                    app:startIconTint="#888888">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint=""
+                        android:textSize="14sp"
+                        android:inputType="textPassword"
+                        android:autofillHints="password" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Submit Staff Button -->
+                <Button
+                    android:id="@+id/btnAddStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="Submit Staff ➤"
+                    android:textSize="15sp"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:background="@drawable/btn_dark_green_rounded"
+                    android:stateListAnimator="@null"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ══════════════════════════════════════ -->
+        <!--  STAFF MEMBERS HEADER                -->
+        <!-- ══════════════════════════════════════ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Staff Members"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#1A1A1A" />
+
+            <!-- Total count badge -->
+            <TextView
+                android:id="@+id/tvStaffCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 Total"
+                android:textSize="11sp"
+                android:textColor="#1B4332"
+                android:textStyle="bold"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:background="@drawable/badge_jeepney_unit" />
+
+        </LinearLayout>
+
+        <!-- ══════════════════════════════════════ -->
+        <!--  STAFF LIST (RecyclerView)           -->
+        <!-- ══════════════════════════════════════ -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvStaff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:nestedScrollingEnabled="false"
-            app:layout_constraintTop_toBottomOf="@id/tvStaffListHeader"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@android:layout/simple_list_item_2" />
-        <!-- Fare Settings - Admin Only -->
-        <TextView
-            android:id="@+id/tvFareTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Fare Settings"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/rvStaff"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:clipToPadding="false"
+            android:layout_marginBottom="16dp"
+            tools:listitem="@layout/item_staff" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutFarePrice"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <!-- ══════════════════════════════════════ -->
+        <!--  FARE SETTINGS CARD                  -->
+        <!-- ══════════════════════════════════════ -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Fare Price (PHP)"
-            app:layout_constraintTop_toBottomOf="@id/tvFareTitle">
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etFarePrice"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="20dp">
 
-        <Button
-            android:id="@+id/btnUpdateFare"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="12dp"
-            android:text="UPDATE FARE PRICE"
-            app:layout_constraintTop_toBottomOf="@id/layoutFarePrice"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- Fare Card Header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <!-- Green icon circle -->
+                    <FrameLayout
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:background="@drawable/circle_light_green"
+                        android:layout_marginEnd="12dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_fare"
+                            app:tint="#1B4332" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fare Settings"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#1A1A1A" />
+
+                </LinearLayout>
+
+                <!-- Fare Price Label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fare Price (PHP)"
+                    android:textSize="12sp"
+                    android:textColor="#555555"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Fare Price Input with ₱ prefix -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="8dp">
+
+                    <EditText
+                        android:id="@+id/etFarePrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:hint="0.00"
+                        android:textSize="16sp"
+                        android:textColor="#1A1A1A"
+                        android:textColorHint="#BBBBBB"
+                        android:background="@drawable/input_rounded_bg"
+                        android:paddingStart="40dp"
+                        android:paddingEnd="14dp"
+                        android:inputType="numberDecimal"
+                        android:autofillHints="off" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="14dp"
+                        android:text="₱"
+                        android:textSize="16sp"
+                        android:textColor="#1B4332"
+                        android:textStyle="bold" />
+
+                </FrameLayout>
+
+                <!-- Hint text -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="This price will be applied to all standard staff transport bookings."
+                    android:textSize="11sp"
+                    android:textColor="#AAAAAA"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Update Fare Button -->
+                <Button
+                    android:id="@+id/btnUpdateFare"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="↻  Update Fare Price"
+                    android:textSize="15sp"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:background="@drawable/btn_dark_green_rounded"
+                    android:stateListAnimator="@null"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
 </ScrollView>

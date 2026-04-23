@@ -15,10 +15,17 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder> 
 
     private List<StaffModel> staffList;
     private List<StaffModel> staffListFull;
+    private OnItemClickListener listener;
 
-    public StaffAdapter(List<StaffModel> staffList) {
+    // ✅ Interface for click events — StaffFragment implements this
+    public interface OnItemClickListener {
+        void onItemClick(StaffModel staff);
+    }
+
+    public StaffAdapter(List<StaffModel> staffList, OnItemClickListener listener) {
         this.staffListFull = new ArrayList<>(staffList);
-        this.staffList = new ArrayList<>(staffList);
+        this.staffList     = new ArrayList<>(staffList);
+        this.listener      = listener;
     }
 
     @NonNull
@@ -34,6 +41,11 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder> 
         StaffModel staff = staffList.get(position);
         holder.tvStaffName.setText("Name: " + staff.getStaff_fname() + " " + staff.getStaff_lname());
         holder.tvStaffUsername.setText("Username: " + staff.getStaff_username());
+
+        // ✅ Trigger edit dialog on item click
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) listener.onItemClick(staff);
+        });
     }
 
     @Override
@@ -59,7 +71,7 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder> 
 
     public void updateList(List<StaffModel> newList) {
         staffListFull = new ArrayList<>(newList);
-        staffList = new ArrayList<>(newList);
+        staffList     = new ArrayList<>(newList);
         notifyDataSetChanged();
     }
 
@@ -68,7 +80,7 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.ViewHolder> 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvStaffName = itemView.findViewById(R.id.tvItemStaffName);
+            tvStaffName     = itemView.findViewById(R.id.tvItemStaffName);
             tvStaffUsername = itemView.findViewById(R.id.tvItemStaffUsername);
         }
     }

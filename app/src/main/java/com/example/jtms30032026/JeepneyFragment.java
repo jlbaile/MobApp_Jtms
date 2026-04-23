@@ -1,21 +1,22 @@
 package com.example.jtms30032026;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SearchView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JeepneyFragment extends Fragment {
+public class JeepneyFragment extends Fragment implements JeepneyAdapter.OnItemClickListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -72,44 +73,46 @@ public class JeepneyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Init views
-        EditText etDriverName = view.findViewById(R.id.etDriverName);
+        EditText etDriverName  = view.findViewById(R.id.etDriverName);
         EditText etPlateNumber = view.findViewById(R.id.etPlateNumber);
-        EditText etCapacity = view.findViewById(R.id.etCapacity);
-        Button btnAddJeepney = view.findViewById(R.id.btnAddJeepney);
-        androidx.appcompat.widget.SearchView svJeepney = view.findViewById(R.id.svJeepney);
-        rvJeepney = view.findViewById(R.id.rvJeepney);
+        EditText etCapacity    = view.findViewById(R.id.etCapacity);
+        Button   btnAddJeepney = view.findViewById(R.id.btnAddJeepney);
+        EditText svJeepney     = view.findViewById(R.id.svJeepney); // now a plain EditText
+        rvJeepney              = view.findViewById(R.id.rvJeepney);
 
         // Setup RecyclerView
         jeepneyList = new ArrayList<>();
-        adapter = new JeepneyAdapter(jeepneyList);
+        adapter = new JeepneyAdapter(jeepneyList, this);
         rvJeepney.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvJeepney.setAdapter(adapter);
 
         // Fetch data on load
         fetchJeepneys();
 
-        // Search listener
-        svJeepney.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+        // Search — TextWatcher replaces SearchView.OnQueryTextListener
+        svJeepney.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                adapter.filter(query);
-                return false;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.filter(s.toString());
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.filter(newText);
-                return false;
-            }
+            public void afterTextChanged(Editable s) {}
         });
-
-
 
         // Add Jeepney button
         btnAddJeepney.setOnClickListener(v -> {
-            final String driverName = etDriverName.getText().toString();
-            final String plateNumber = etPlateNumber.getText().toString();
-            final String capacity = etCapacity.getText().toString();
+            final String driverName  = etDriverName.getText().toString().trim();
+            final String plateNumber = etPlateNumber.getText().toString().trim();
+            final String capacity    = etCapacity.getText().toString().trim();
+
+            if (driverName.isEmpty() || plateNumber.isEmpty() || capacity.isEmpty()) {
+                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             RequestQueue queue = Volley.newRequestQueue(requireContext());
             String url = AppConfig.BASE_URL + "jeepneycreate.php";
@@ -121,7 +124,7 @@ public class JeepneyFragment extends Fragment {
                             etDriverName.setText("");
                             etPlateNumber.setText("");
                             etCapacity.setText("");
-                            fetchJeepneys(); // Refresh list after adding
+                            fetchJeepneys();
                         } else {
                             Toast.makeText(requireContext(), "Failed: " + response, Toast.LENGTH_SHORT).show();
                         }
@@ -131,15 +134,99 @@ public class JeepneyFragment extends Fragment {
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<>();
-                    params.put("driver_name", driverName);
+                    params.put("driver_name",  driverName);
                     params.put("plate_number", plateNumber);
-                    params.put("capacity", capacity);
+                    params.put("capacity",     capacity);
                     return params;
                 }
             };
             queue.add(stringRequest);
         });
     }
+
+    // Called when ⋮ menu is tapped on a jeepney item
+    @Override
+    public void onItemClick(JeepneyModel jeepney) {
+        showEditDialog(jeepney);
+    }
+
+    // ─── Edit Dialog ──────────────────────────────────────────────────────────
+
+    private void showEditDialog(JeepneyModel jeepney) {
+        View dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_edit_jeepney, null);
+
+        EditText etEditDriverName  = dialogView.findViewById(R.id.etEditDriverName);
+        EditText etEditPlateNumber = dialogView.findViewById(R.id.etEditPlateNumber);
+        EditText etEditCapacity    = dialogView.findViewById(R.id.etEditCapacity);
+
+        // Pre-fill current values
+        etEditDriverName.setText(jeepney.getDriver_name());
+        etEditPlateNumber.setText(jeepney.getPlate_number());
+        etEditCapacity.setText(jeepney.getCapacity());
+
+        // Build dialog using the new custom layout
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .create();
+
+        // Use the layout's own buttons instead of AlertDialog built-ins
+        Button btnCancel = dialogView.findViewById(R.id.btnCancelEdit);
+        Button btnSave   = dialogView.findViewById(R.id.btnSaveEdit);
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        btnSave.setOnClickListener(v -> {
+            String newDriverName  = etEditDriverName.getText().toString().trim();
+            String newPlateNumber = etEditPlateNumber.getText().toString().trim();
+            String newCapacity    = etEditCapacity.getText().toString().trim();
+
+            if (newDriverName.isEmpty() || newPlateNumber.isEmpty() || newCapacity.isEmpty()) {
+                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            updateJeepney(jeepney.getJeepney_id(), newDriverName, newPlateNumber, newCapacity);
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    // ─── Update Request ───────────────────────────────────────────────────────
+
+    private void updateJeepney(String jeepneyId, String driverName, String plateNumber, String capacity) {
+        String url = AppConfig.BASE_URL + "jeepneyupdate.php";
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    if (response.trim().equals("success")) {
+                        Toast.makeText(requireContext(), "Jeepney Updated Successfully", Toast.LENGTH_SHORT).show();
+                        fetchJeepneys();
+                    } else {
+                        Toast.makeText(requireContext(), "Update Failed: " + response, Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    Log.e("VolleyError", error.toString());
+                    Toast.makeText(requireContext(), "Network error", Toast.LENGTH_SHORT).show();
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("jeepney_id",   jeepneyId);
+                params.put("driver_name",  driverName);
+                params.put("plate_number", plateNumber);
+                params.put("capacity",     capacity);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+    // ─── Fetch Jeepneys ───────────────────────────────────────────────────────
 
     private void fetchJeepneys() {
         String url = AppConfig.BASE_URL + "jeepneyread.php";

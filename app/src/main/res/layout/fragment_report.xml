@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F6F8"
+    android:background="#F5F5F5"
     android:fillViewport="true">
 
     <LinearLayout
@@ -18,76 +18,150 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reports"
-            android:textSize="22sp"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="#1A1A2E"
-            android:layout_marginBottom="12dp"/>
+            android:textColor="#1A1A1A"
+            android:layout_marginBottom="16dp"/>
 
         <!-- Filter Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="3dp">
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="14dp">
+                android:padding="16dp">
 
+                <!-- Date Range Label -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="FILTERS"
-                    android:textSize="11sp"
-                    android:textColor="#888"
-                    android:letterSpacing="0.12"
-                    android:layout_marginBottom="10dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
-
-                    <Button
-                        android:id="@+id/btnStartDate"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="6dp"
-                        android:textSize="12sp"
-                        android:backgroundTint="#E8F0FE"
-                        android:textColor="#1A73E8"
-                        android:text="From: --"
-                        style="@style/Widget.AppCompat.Button"/>
-
-                    <Button
-                        android:id="@+id/btnEndDate"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="12sp"
-                        android:backgroundTint="#E8F0FE"
-                        android:textColor="#1A73E8"
-                        android:text="To: --"
-                        style="@style/Widget.AppCompat.Button"/>
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btnSelectJeepneys"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:text="Date Range"
                     android:textSize="13sp"
-                    android:backgroundTint="#E8F0FE"
-                    android:textColor="#1A73E8"
-                    android:text="Jeepneys: All"
-                    style="@style/Widget.AppCompat.Button"/>
+                    android:textStyle="bold"
+                    android:textColor="#1A1A1A"
+                    android:layout_marginBottom="8dp"/>
 
-                <!-- Generate + Export row -->
+                <!-- Date Range Row — From and To side by side with divider -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#F5F5F5">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <!-- From date button -->
+                        <Button
+                            android:id="@+id/btnStartDate"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:text="Apr 01, 2026"
+                            android:textSize="12sp"
+                            android:textColor="#1A1A1A"
+                            android:backgroundTint="@android:color/transparent"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+                        <!-- Divider -->
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="24dp"
+                            android:background="#CCCCCC"/>
+
+                        <!-- To date button -->
+                        <Button
+                            android:id="@+id/btnEndDate"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:text="Apr 30, 2026"
+                            android:textSize="12sp"
+                            android:textColor="#1A1A1A"
+                            android:backgroundTint="@android:color/transparent"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+                        <!-- Calendar icon -->
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="4dp"
+                            android:src="@android:drawable/ic_menu_my_calendar"
+                            android:tint="#555555"
+                            android:padding="8dp"
+                            android:contentDescription="Calendar"/>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Jeepney selector -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jeepneys"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A1A1A"
+                    android:layout_marginBottom="8dp"/>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#F5F5F5">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <Button
+                            android:id="@+id/btnSelectJeepneys"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:text="Jeepneys: All"
+                            android:textSize="12sp"
+                            android:textColor="#1A1A1A"
+                            android:backgroundTint="@android:color/transparent"
+                            android:gravity="center_vertical|start"
+                            android:paddingStart="12dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="4dp"
+                            android:src="@android:drawable/arrow_down_float"
+                            android:tint="#555555"
+                            android:padding="10dp"
+                            android:contentDescription="Select"/>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Generate + Export buttons -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -96,26 +170,31 @@
                     <Button
                         android:id="@+id/btnGenerateReport"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_weight="1"
-                        android:layout_marginEnd="6dp"
+                        android:layout_marginEnd="8dp"
                         android:text="Generate Report"
                         android:textColor="#FFFFFF"
-                        android:backgroundTint="#1A73E8"
                         android:textStyle="bold"
-                        style="@style/Widget.AppCompat.Button"/>
+                        android:textSize="13sp"
+                        android:backgroundTint="#1B4332"
+                        app:cornerRadius="8dp"
+                        style="@style/Widget.MaterialComponents.Button"/>
 
                     <Button
                         android:id="@+id/btnExportExcel"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_weight="0.7"
-                        android:text="Export XLS"
-                        android:textColor="#FFFFFF"
-                        android:backgroundTint="#2E7D32"
+                        android:text="⬇ Export"
+                        android:textColor="#1B4332"
                         android:textStyle="bold"
-                        android:textSize="12sp"
-                        style="@style/Widget.AppCompat.Button"/>
+                        android:textSize="13sp"
+                        android:backgroundTint="#FFFFFF"
+                        app:cornerRadius="8dp"
+                        app:strokeColor="#1B4332"
+                        app:strokeWidth="1.5dp"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
                 </LinearLayout>
 
@@ -129,7 +208,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="12sp"
-            android:textColor="#555"
+            android:textColor="#666666"
             android:gravity="center"
             android:layout_marginBottom="12dp"/>
 
@@ -147,7 +226,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="16dp">
 
             <!-- Total Trips -->
             <androidx.cardview.widget.CardView
@@ -155,28 +234,30 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="6dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="3dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp"
+                    android:padding="14dp"
                     android:gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Total Trips"
                         android:textSize="11sp"
-                        android:textColor="#888"/>
+                        android:textColor="#888888"/>
                     <TextView
                         android:id="@+id/tvReportTotalTrips"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
-                        android:textSize="24sp"
+                        android:textSize="26sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E"/>
+                        android:textColor="#1A1A1A"
+                        android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -186,63 +267,67 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="6dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="3dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp"
+                    android:padding="14dp"
                     android:gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Est. Passengers"
+                        android:text="Passengers"
                         android:textSize="11sp"
-                        android:textColor="#888"/>
+                        android:textColor="#888888"/>
                     <TextView
                         android:id="@+id/tvReportTotalPassengers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
-                        android:textSize="24sp"
+                        android:textSize="26sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E"/>
+                        android:textColor="#1A1A1A"
+                        android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Total Revenue — uses auto-sizing text -->
+            <!-- Total Revenue -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="3dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp"
+                    android:padding="14dp"
                     android:gravity="center">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Revenue"
                         android:textSize="11sp"
-                        android:textColor="#888"/>
+                        android:textColor="#888888"/>
                     <TextView
                         android:id="@+id/tvReportTotalRevenue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="&#8369;0.00"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#2E7D32"
+                        android:textColor="#1B4332"
                         android:gravity="center"
                         android:maxLines="1"
+                        android:layout_marginTop="2dp"
                         app:autoSizeTextType="uniform"
                         app:autoSizeMinTextSize="10sp"
-                        app:autoSizeMaxTextSize="20sp"
+                        app:autoSizeMaxTextSize="18sp"
                         app:autoSizeStepGranularity="1sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -255,7 +340,7 @@
             android:layout_height="wrap_content"
             android:text="PER-JEEPNEY BREAKDOWN"
             android:textSize="11sp"
-            android:textColor="#888"
+            android:textColor="#888888"
             android:letterSpacing="0.12"
             android:layout_marginBottom="8dp"/>
 

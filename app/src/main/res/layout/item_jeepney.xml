@@ -3,31 +3,128 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp">
 
-        <TextView
-            android:id="@+id/tvItemDriverName"
+        <!-- Jeepney icon in a light-green circle -->
+        <FrameLayout
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/circle_light_green"
+            android:layout_marginEnd="14dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_jeepney"
+                app:tint="#1B4332" />
+
+        </FrameLayout>
+
+        <!-- Driver name + Plate · Capacity -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- ID kept: tvItemDriverName -->
+            <TextView
+                android:id="@+id/tvItemDriverName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#1A1A1A"
+                android:layout_marginBottom="3dp"
+                tools:text="Juan Dela Cruz"
+                xmlns:tools="http://schemas.android.com/tools"/>
+
+            <!-- Plate · Capacity row -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- ID kept: tvItemPlateNumber -->
+                <TextView
+                    android:id="@+id/tvItemPlateNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="#555555"
+                    tools:text="NXX-4592"
+                    xmlns:tools="http://schemas.android.com/tools"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" · "
+                    android:textSize="13sp"
+                    android:textColor="#BBBBBB" />
+
+                <!-- NEW: capacity displayed inline -->
+                <TextView
+                    android:id="@+id/tvItemCapacity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="#555555"
+                    tools:text="22 Seater"
+                    xmlns:tools="http://schemas.android.com/tools"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Right side: ACTIVE badge + overflow menu -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#000000" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvItemPlateNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="#666666" />
+            <!-- Status badge (tinted at runtime in adapter) -->
+            <TextView
+                android:id="@+id/tvItemStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACTIVE"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="#1B4332"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:background="@drawable/badge_active_green"
+                android:layout_marginEnd="4dp" />
+
+            <!-- Kebab / overflow menu button -->
+            <ImageView
+                android:id="@+id/btnItemMenu"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_more_vert"
+                android:padding="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="#888888" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

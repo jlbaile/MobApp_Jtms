@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
+    android:layout_marginStart="0dp"
+    android:layout_marginEnd="0dp"
     android:layout_marginBottom="10dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="3dp">
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,31 +16,34 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Header: icon + plate + driver -->
+        <!-- Top row: jeepney icon + plate/driver + COMPLETED badge -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="14dp">
 
+            <!-- Jeepney icon circle -->
             <androidx.cardview.widget.CardView
                 android:layout_width="44dp"
                 android:layout_height="44dp"
                 app:cardCornerRadius="22dp"
-                app:cardBackgroundColor="#EEF2FF">
-
+                app:cardBackgroundColor="#E8F5E9"
+                app:cardElevation="0dp">
                 <ImageView
                     android:layout_width="26dp"
                     android:layout_height="26dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_jeepney"
-                    android:tint="#3F51B5" />
+                    android:tint="#1B4332"/>
             </androidx.cardview.widget.CardView>
 
+            <!-- Plate + driver -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical"
                 android:layout_marginStart="12dp">
 
@@ -47,19 +51,35 @@
                     android:id="@+id/tvPlateNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="JEEP-0000"
+                    android:text="PLAT23S2"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:textColor="#1A1A1A" />
+                    android:textColor="#1A1A1A"/>
 
                 <TextView
                     android:id="@+id/tvDriverName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Driver : --"
+                    android:text="Driver Name"
                     android:textSize="12sp"
-                    android:textColor="#888888" />
+                    android:textColor="#888888"
+                    android:layout_marginTop="2dp"/>
             </LinearLayout>
+
+            <!-- COMPLETED badge -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="COMPLETED"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="#888888"
+                android:background="@drawable/badge_completed"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"/>
+
         </LinearLayout>
 
         <!-- Divider -->
@@ -67,101 +87,104 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#F0F0F0"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="14dp"/>
 
-        <!-- Depart -->
+        <!-- Stats row: DEPART | RETURNED | CAPACITY -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:orientation="horizontal">
 
-            <TextView
+            <!-- DEPART -->
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="DEPART"
-                android:textSize="11sp"
-                android:textColor="#888888"
-                android:letterSpacing="0.08" />
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DEPART"
+                    android:textSize="10sp"
+                    android:textColor="#888888"
+                    android:letterSpacing="0.08"
+                    android:layout_marginBottom="4dp"/>
+                <TextView
+                    android:id="@+id/tvDepartTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--:-- AM"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A1A1A"/>
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvDepartTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="--:-- AM"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textColor="#1A1A1A" />
-        </LinearLayout>
-
-        <!-- Returned -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-
-            <TextView
+            <!-- RETURNED -->
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="RETURNED"
-                android:textSize="11sp"
-                android:textColor="#888888"
-                android:letterSpacing="0.08" />
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RETURNED"
+                    android:textSize="10sp"
+                    android:textColor="#888888"
+                    android:letterSpacing="0.08"
+                    android:layout_marginBottom="4dp"/>
+                <TextView
+                    android:id="@+id/tvReturnTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--:-- AM"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A1A1A"/>
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvReturnTime"
-                android:layout_width="wrap_content"
+            <!-- CAPACITY -->
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="--:-- AM"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textColor="#1A1A1A" />
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CAPACITY"
+                    android:textSize="10sp"
+                    android:textColor="#888888"
+                    android:letterSpacing="0.08"
+                    android:layout_marginBottom="4dp"/>
+                <TextView
+                    android:id="@+id/tvCapacity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A1A1A"/>
+            </LinearLayout>
+
         </LinearLayout>
 
-        <!-- Capacity -->
+        <!-- Fare row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="8dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="CAPACITY"
-                android:textSize="11sp"
-                android:textColor="#888888"
-                android:letterSpacing="0.08" />
-
-            <TextView
-                android:id="@+id/tvCapacity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:textColor="#1A1A1A" />
-        </LinearLayout>
-
-        <!-- Fare -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="12dp">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="FARE"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 android:textColor="#888888"
-                android:letterSpacing="0.08" />
+                android:letterSpacing="0.08"/>
 
             <TextView
                 android:id="@+id/tvFare"
@@ -170,7 +193,8 @@
                 android:text="₱0.00"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A1A" />
+                android:textColor="#1B4332"/>
+
         </LinearLayout>
 
     </LinearLayout>

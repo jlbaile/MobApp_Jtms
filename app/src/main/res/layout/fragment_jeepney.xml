@@ -4,126 +4,222 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
+    android:background="#F5F5F5"
+    android:fillViewport="true"
     tools:context=".JeepneyFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Jeepney Details"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- Driver Name Input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutDriverName"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <!-- ══════════════════════════════════════ -->
+        <!--  REGISTER NEW VEHICLE CARD            -->
+        <!-- ══════════════════════════════════════ -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:hint="Driver Name"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle">
+            android:layout_marginBottom="14dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#FFFFFF">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etDriverName"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="20dp">
 
-        <!-- Plate Number Input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutPlateNumber"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Jeepney Plate Number"
-            app:layout_constraintTop_toBottomOf="@id/layoutDriverName">
+                <!-- Card Header: Title + "Jeepney Unit" badge -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="20dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPlateNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapCharacters" />
-        </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Register New Vehicle"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="#1A1A1A" />
 
-        <!-- Capacity Input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutCapacity"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Capacity"
-            app:layout_constraintTop_toBottomOf="@id/layoutPlateNumber">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jeepney Unit"
+                        android:textSize="11sp"
+                        android:textColor="#1B4332"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:background="@drawable/badge_jeepney_unit" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etCapacity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
-        <!-- Add Button -->
-        <Button
-            android:id="@+id/btnAddJeepney"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="32dp"
-            android:text="ADD JEEPNEY"
-            android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/layoutCapacity"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="HardcodedText" />
+                <!-- Driver Name Label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Driver Name"
+                    android:textSize="12sp"
+                    android:textColor="#555555"
+                    android:layout_marginBottom="6dp" />
 
-        <!-- Search Bar -->
-        <androidx.appcompat.widget.SearchView
+                <!-- Driver Name Input — ID kept: etDriverName -->
+                <EditText
+                    android:id="@+id/etDriverName"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Enter full name"
+                    android:textSize="14sp"
+                    android:textColor="#1A1A1A"
+                    android:textColorHint="#BBBBBB"
+                    android:background="@drawable/input_rounded_bg"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:inputType="textPersonName"
+                    android:autofillHints="name"
+                    android:layout_marginBottom="14dp" />
+
+                <!-- Plate Number + Capacity side by side -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp">
+
+                    <!-- Plate Number -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Plate Number"
+                            android:textSize="12sp"
+                            android:textColor="#555555"
+                            android:layout_marginBottom="6dp" />
+
+                        <!-- ID kept: etPlateNumber -->
+                        <EditText
+                            android:id="@+id/etPlateNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:hint="ABC-1234"
+                            android:textSize="14sp"
+                            android:textColor="#1A1A1A"
+                            android:textColorHint="#BBBBBB"
+                            android:background="@drawable/input_rounded_bg"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp"
+                            android:inputType="textCapCharacters"
+                            android:autofillHints="off" />
+
+                    </LinearLayout>
+
+                    <!-- Capacity -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Capacity"
+                            android:textSize="12sp"
+                            android:textColor="#555555"
+                            android:layout_marginBottom="6dp" />
+
+                        <!-- ID kept: etCapacity -->
+                        <EditText
+                            android:id="@+id/etCapacity"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:hint="20"
+                            android:textSize="14sp"
+                            android:textColor="#1A1A1A"
+                            android:textColorHint="#BBBBBB"
+                            android:background="@drawable/input_rounded_bg"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp"
+                            android:inputType="number"
+                            android:autofillHints="off" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Add Vehicle Button — ID kept: btnAddJeepney -->
+                <Button
+                    android:id="@+id/btnAddJeepney"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="+ Add Vehicle"
+                    android:textSize="15sp"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:background="@drawable/btn_dark_green_rounded"
+                    android:stateListAnimator="@null"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ══════════════════════════════════════ -->
+        <!--  SEARCH BAR — ID kept: svJeepney     -->
+        <!-- ══════════════════════════════════════ -->
+        <EditText
             android:id="@+id/svJeepney"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/searchview_background"
-            app:iconifiedByDefault="false"
-            app:queryHint="Search Plate Number..."
-            app:layout_constraintTop_toBottomOf="@id/btnAddJeepney"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_height="48dp"
+            android:hint="Search by driver or plate number..."
+            android:textSize="13sp"
+            android:textColor="#1A1A1A"
+            android:textColorHint="#AAAAAA"
+            android:background="@drawable/search_rounded_bg"
+            android:paddingStart="44dp"
+            android:paddingEnd="14dp"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="4dp"
+            android:inputType="text"
+            android:layout_marginBottom="20dp" />
 
-        <!-- List Title (Optional but recommended) -->
+        <!-- ══════════════════════════════════════ -->
+        <!--  LIST HEADER                         -->
+        <!-- ══════════════════════════════════════ -->
         <TextView
             android:id="@+id/tvListHeader"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="Registered Jeepneys"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@id/svJeepney"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textColor="#1A1A1A"
+            android:layout_marginBottom="10dp" />
 
-        <!-- RecyclerView -->
+        <!-- ══════════════════════════════════════ -->
+        <!--  JEEPNEY LIST — ID kept: rvJeepney   -->
+        <!-- ══════════════════════════════════════ -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvJeepney"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:nestedScrollingEnabled="false"
-            app:layout_constraintTop_toBottomOf="@id/tvListHeader"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@android:layout/simple_list_item_2" />
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_jeepney" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </ScrollView>
