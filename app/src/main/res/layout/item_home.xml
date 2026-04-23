@@ -200,15 +200,15 @@
         <!-- Depart / Return Button -->
         <Button
             android:id="@+id/btnDepartReturn"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:backgroundTint="#1B4332"
             android:text="Depart"
+            android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#1B4332"
-            app:cornerRadius="10dp"
-            style="@style/Widget.MaterialComponents.Button"/>
+            app:cornerRadius="10dp" />
 
     </LinearLayout>
 

@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,13 +37,15 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        EditText etLoginUsername = view.findViewById(R.id.etLoginUsername);
-        EditText etLoginPassword = view.findViewById(R.id.etLoginPassword);
-        Button btnLogin = view.findViewById(R.id.btnLogin);
+        // Updated IDs to match new fragment_login.xml
+        EditText etLoginUsername         = view.findViewById(R.id.etUsername);
+        TextInputEditText etLoginPassword = view.findViewById(R.id.etPassword);
+        Button btnLogin                  = view.findViewById(R.id.btnLogin);
 
         btnLogin.setOnClickListener(v -> {
             String username = etLoginUsername.getText().toString().trim();
-            String password = etLoginPassword.getText().toString().trim();
+            String password = etLoginPassword.getText() != null
+                    ? etLoginPassword.getText().toString().trim() : "";
 
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(requireContext(), "Please enter username and password", Toast.LENGTH_SHORT).show();

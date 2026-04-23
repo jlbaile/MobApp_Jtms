@@ -75,17 +75,16 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Init views — new IDs from redesigned fragment_staff.xml
-        EditText etFirstName      = view.findViewById(R.id.etFirstName);
-        EditText etLastName       = view.findViewById(R.id.etLastName);
-        EditText etUsername       = view.findViewById(R.id.etUsername);
+        EditText etFirstName         = view.findViewById(R.id.etFirstName);
+        EditText etLastName          = view.findViewById(R.id.etLastName);
+        EditText etUsername          = view.findViewById(R.id.etUsername);
         TextInputEditText etPassword = view.findViewById(R.id.etPassword);
-        Button   btnAddStaff      = view.findViewById(R.id.btnAddStaff);
-        EditText etFarePrice      = view.findViewById(R.id.etFarePrice);
-        Button   btnUpdateFare    = view.findViewById(R.id.btnUpdateFare);
-        EditText svStaff          = view.findViewById(R.id.svStaff); // now a plain EditText
-        tvStaffCount              = view.findViewById(R.id.tvStaffCount);
-        rvStaff                   = view.findViewById(R.id.rvStaff);
+        Button   btnAddStaff         = view.findViewById(R.id.btnAddStaff);
+        EditText etFarePrice         = view.findViewById(R.id.etFarePrice);
+        Button   btnUpdateFare       = view.findViewById(R.id.btnUpdateFare);
+        EditText svStaff             = view.findViewById(R.id.svStaff);
+        tvStaffCount                 = view.findViewById(R.id.tvStaffCount);
+        rvStaff                      = view.findViewById(R.id.rvStaff);
 
         // Setup RecyclerView
         staffList = new ArrayList<>();
@@ -93,21 +92,15 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
         rvStaff.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvStaff.setAdapter(adapter);
 
-        // Fetch staff on load
         fetchStaff();
 
-        // Search — TextWatcher replaces SearchView.OnQueryTextListener
+        // Search
         svStaff.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 adapter.filter(s.toString());
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
+            @Override public void afterTextChanged(Editable s) {}
         });
 
         // Load current fare price
@@ -148,7 +141,7 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
             queue.add(updateRequest);
         });
 
-        // Add Staff button
+        // Add Staff
         btnAddStaff.setOnClickListener(v -> {
             final String staffFname    = etFirstName.getText().toString().trim();
             final String staffLname    = etLastName.getText().toString().trim();
@@ -162,9 +155,8 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
             }
 
             RequestQueue queue = Volley.newRequestQueue(requireContext());
-            String url = AppConfig.BASE_URL + "staffcreate.php";
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                    AppConfig.BASE_URL + "staffcreate.php",
                     response -> {
                         if (response.trim().equals("success")) {
                             Toast.makeText(requireContext(), "Staff Added Successfully", Toast.LENGTH_SHORT).show();
@@ -193,10 +185,58 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
         });
     }
 
-    // Called when ⋮ menu is tapped on a staff item
+    // ── Adapter callbacks ────────────────────────────────────────────────────
+
     @Override
-    public void onItemClick(StaffModel staff) {
+    public void onEditClick(StaffModel staff) {
         showEditDialog(staff);
+    }
+
+    @Override
+    public void onDeleteClick(StaffModel staff) {
+        showDeleteConfirmation(staff);
+    }
+
+    // ─── Delete Confirmation ──────────────────────────────────────────────────
+
+    private void showDeleteConfirmation(StaffModel staff) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Delete Staff")
+                .setMessage("Are you sure you want to delete " +
+                        staff.getStaff_fname() + " " + staff.getStaff_lname() + "?")
+                .setPositiveButton("Delete", (dialog, which) -> deleteStaff(staff.getStaff_id()))
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    // ─── Delete Request ───────────────────────────────────────────────────────
+
+    private void deleteStaff(String staffId) {
+        String url = AppConfig.BASE_URL + "staffdelete.php";
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    if (response.trim().equals("success")) {
+                        Toast.makeText(requireContext(), "Staff Deleted", Toast.LENGTH_SHORT).show();
+                        fetchStaff();
+                    } else {
+                        Toast.makeText(requireContext(), "Delete Failed: " + response, Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    Log.e("VolleyError", error.toString());
+                    Toast.makeText(requireContext(), "Network error", Toast.LENGTH_SHORT).show();
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("staff_id", staffId);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
     }
 
     // ─── Edit Dialog ──────────────────────────────────────────────────────────
@@ -210,18 +250,15 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
         EditText etEditUsername          = dialogView.findViewById(R.id.etEditStaffUsername);
         TextInputEditText etEditPassword = dialogView.findViewById(R.id.etEditStaffPassword);
 
-        // Pre-fill current values
         etEditFname.setText(staff.getStaff_fname());
         etEditLname.setText(staff.getStaff_lname());
         etEditUsername.setText(staff.getStaff_username());
         etEditPassword.setText(staff.getStaff_password());
 
-        // Build dialog using the new custom layout
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
                 .create();
 
-        // Wire layout buttons instead of AlertDialog built-ins
         Button btnCancel = dialogView.findViewById(R.id.btnCancelStaffEdit);
         Button btnSave   = dialogView.findViewById(R.id.btnSaveStaffEdit);
 
@@ -238,7 +275,6 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
                 Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             updateStaff(staff.getStaff_id(), newFname, newLname, newUsername, newPassword);
             dialog.dismiss();
         });
@@ -249,10 +285,9 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
     // ─── Update Request ───────────────────────────────────────────────────────
 
     private void updateStaff(String staffId, String fname, String lname, String username, String password) {
-        String url = AppConfig.BASE_URL + "staffupdate.php";
         RequestQueue queue = Volley.newRequestQueue(requireContext());
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                AppConfig.BASE_URL + "staffupdate.php",
                 response -> {
                     if (response.trim().equals("success")) {
                         Toast.makeText(requireContext(), "Staff Updated Successfully", Toast.LENGTH_SHORT).show();
@@ -283,27 +318,24 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
     // ─── Fetch Staff ──────────────────────────────────────────────────────────
 
     private void fetchStaff() {
-        String url = AppConfig.BASE_URL + "staffread.php";
         RequestQueue queue = Volley.newRequestQueue(requireContext());
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                AppConfig.BASE_URL + "staffread.php",
                 response -> {
                     try {
                         staffList.clear();
                         JSONArray jsonArray = new JSONArray(response);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject obj = jsonArray.getJSONObject(i);
-                            StaffModel staff = new StaffModel(
+                            staffList.add(new StaffModel(
                                     obj.getString("staff_id"),
                                     obj.getString("staff_fname"),
                                     obj.getString("staff_lname"),
                                     obj.getString("staff_username"),
                                     obj.getString("staff_password")
-                            );
-                            staffList.add(staff);
+                            ));
                         }
                         adapter.updateList(staffList);
-                        // Update the total count badge
                         tvStaffCount.setText(staffList.size() + " Total");
                     } catch (Exception e) {
                         Log.e("JSONError", e.toString());

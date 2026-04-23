@@ -72,12 +72,11 @@ public class JeepneyFragment extends Fragment implements JeepneyAdapter.OnItemCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Init views
         EditText etDriverName  = view.findViewById(R.id.etDriverName);
         EditText etPlateNumber = view.findViewById(R.id.etPlateNumber);
         EditText etCapacity    = view.findViewById(R.id.etCapacity);
         Button   btnAddJeepney = view.findViewById(R.id.btnAddJeepney);
-        EditText svJeepney     = view.findViewById(R.id.svJeepney); // now a plain EditText
+        EditText svJeepney     = view.findViewById(R.id.svJeepney);
         rvJeepney              = view.findViewById(R.id.rvJeepney);
 
         // Setup RecyclerView
@@ -86,24 +85,18 @@ public class JeepneyFragment extends Fragment implements JeepneyAdapter.OnItemCl
         rvJeepney.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvJeepney.setAdapter(adapter);
 
-        // Fetch data on load
         fetchJeepneys();
 
-        // Search — TextWatcher replaces SearchView.OnQueryTextListener
+        // Search
         svJeepney.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 adapter.filter(s.toString());
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
+            @Override public void afterTextChanged(Editable s) {}
         });
 
-        // Add Jeepney button
+        // Add Jeepney
         btnAddJeepney.setOnClickListener(v -> {
             final String driverName  = etDriverName.getText().toString().trim();
             final String plateNumber = etPlateNumber.getText().toString().trim();
@@ -115,9 +108,8 @@ public class JeepneyFragment extends Fragment implements JeepneyAdapter.OnItemCl
             }
 
             RequestQueue queue = Volley.newRequestQueue(requireContext());
-            String url = AppConfig.BASE_URL + "jeepneycreate.php";
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                    AppConfig.BASE_URL + "jeepneycreate.php",
                     response -> {
                         if (response.trim().equals("success")) {
                             Toast.makeText(requireContext(), "Jeepney Added Successfully", Toast.LENGTH_SHORT).show();
@@ -144,10 +136,57 @@ public class JeepneyFragment extends Fragment implements JeepneyAdapter.OnItemCl
         });
     }
 
-    // Called when ⋮ menu is tapped on a jeepney item
+    // ── Adapter callbacks ────────────────────────────────────────────────────
+
     @Override
-    public void onItemClick(JeepneyModel jeepney) {
+    public void onEditClick(JeepneyModel jeepney) {
         showEditDialog(jeepney);
+    }
+
+    @Override
+    public void onDeleteClick(JeepneyModel jeepney) {
+        showDeleteConfirmation(jeepney);
+    }
+
+    // ─── Delete Confirmation ──────────────────────────────────────────────────
+
+    private void showDeleteConfirmation(JeepneyModel jeepney) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Delete Jeepney")
+                .setMessage("Are you sure you want to delete " +
+                        jeepney.getPlate_number() + " (" + jeepney.getDriver_name() + ")?")
+                .setPositiveButton("Delete", (dialog, which) -> deleteJeepney(jeepney.getJeepney_id()))
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    // ─── Delete Request ───────────────────────────────────────────────────────
+
+    private void deleteJeepney(String jeepneyId) {
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                AppConfig.BASE_URL + "jeepneydelete.php",
+                response -> {
+                    if (response.trim().equals("success")) {
+                        Toast.makeText(requireContext(), "Jeepney Deleted", Toast.LENGTH_SHORT).show();
+                        fetchJeepneys();
+                    } else {
+                        Toast.makeText(requireContext(), "Delete Failed: " + response, Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    Log.e("VolleyError", error.toString());
+                    Toast.makeText(requireContext(), "Network error", Toast.LENGTH_SHORT).show();
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("jeepney_id", jeepneyId);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
     }
 
     // ─── Edit Dialog ──────────────────────────────────────────────────────────
@@ -160,17 +199,14 @@ public class JeepneyFragment extends Fragment implements JeepneyAdapter.OnItemCl
         EditText etEditPlateNumber = dialogView.findViewById(R.id.etEditPlateNumber);
         EditText etEditCapacity    = dialogView.findViewById(R.id.etEditCapacity);
 
-        // Pre-fill current values
         etEditDriverName.setText(jeepney.getDriver_name());
         etEditPlateNumber.setText(jeepney.getPlate_number());
         etEditCapacity.setText(jeepney.getCapacity());
 
-        // Build dialog using the new custom layout
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
                 .create();
 
-        // Use the layout's own buttons instead of AlertDialog built-ins
         Button btnCancel = dialogView.findViewById(R.id.btnCancelEdit);
         Button btnSave   = dialogView.findViewById(R.id.btnSaveEdit);
 
@@ -185,7 +221,6 @@ public class JeepneyFragment extends Fragment implements JeepneyAdapter.OnItemCl
                 Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             updateJeepney(jeepney.getJeepney_id(), newDriverName, newPlateNumber, newCapacity);
             dialog.dismiss();
         });
@@ -196,10 +231,9 @@ public class JeepneyFragment extends Fragment implements JeepneyAdapter.OnItemCl
     // ─── Update Request ───────────────────────────────────────────────────────
 
     private void updateJeepney(String jeepneyId, String driverName, String plateNumber, String capacity) {
-        String url = AppConfig.BASE_URL + "jeepneyupdate.php";
         RequestQueue queue = Volley.newRequestQueue(requireContext());
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                AppConfig.BASE_URL + "jeepneyupdate.php",
                 response -> {
                     if (response.trim().equals("success")) {
                         Toast.makeText(requireContext(), "Jeepney Updated Successfully", Toast.LENGTH_SHORT).show();
@@ -229,23 +263,21 @@ public class JeepneyFragment extends Fragment implements JeepneyAdapter.OnItemCl
     // ─── Fetch Jeepneys ───────────────────────────────────────────────────────
 
     private void fetchJeepneys() {
-        String url = AppConfig.BASE_URL + "jeepneyread.php";
         RequestQueue queue = Volley.newRequestQueue(requireContext());
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                AppConfig.BASE_URL + "jeepneyread.php",
                 response -> {
                     try {
                         jeepneyList.clear();
                         JSONArray jsonArray = new JSONArray(response);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject obj = jsonArray.getJSONObject(i);
-                            JeepneyModel jeepney = new JeepneyModel(
+                            jeepneyList.add(new JeepneyModel(
                                     obj.getString("jeepney_id"),
                                     obj.getString("driver_name"),
                                     obj.getString("plate_number"),
                                     obj.getString("capacity")
-                            );
-                            jeepneyList.add(jeepney);
+                            ));
                         }
                         adapter.updateList(jeepneyList);
                     } catch (Exception e) {

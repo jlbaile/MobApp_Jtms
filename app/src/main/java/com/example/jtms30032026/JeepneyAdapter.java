@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,9 +19,9 @@ public class JeepneyAdapter extends RecyclerView.Adapter<JeepneyAdapter.ViewHold
     private List<JeepneyModel> jeepneyListFull;
     private OnItemClickListener listener;
 
-    // Interface for click events — JeepneyFragment implements this
     public interface OnItemClickListener {
-        void onItemClick(JeepneyModel jeepney);
+        void onEditClick(JeepneyModel jeepney);
+        void onDeleteClick(JeepneyModel jeepney);
     }
 
     public JeepneyAdapter(List<JeepneyModel> jeepneyList, OnItemClickListener listener) {
@@ -41,14 +42,27 @@ public class JeepneyAdapter extends RecyclerView.Adapter<JeepneyAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JeepneyModel jeepney = jeepneyList.get(position);
 
-        // Bind text values (no "Driver:" / "Plate:" prefix — new design shows them cleanly)
         holder.tvDriverName.setText(jeepney.getDriver_name());
         holder.tvPlateNumber.setText(jeepney.getPlate_number());
         holder.tvCapacity.setText(jeepney.getCapacity() + " Seater");
 
-        // Trigger edit dialog on ⋮ kebab menu tap
+        // Kebab menu — Edit or Delete
         holder.btnItemMenu.setOnClickListener(v -> {
-            if (listener != null) listener.onItemClick(jeepney);
+            PopupMenu popup = new PopupMenu(v.getContext(), v);
+            popup.getMenu().add(0, 1, 0, "✏️  Edit");
+            popup.getMenu().add(0, 2, 1, "🗑️  Delete");
+
+            popup.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() == 1) {
+                    if (listener != null) listener.onEditClick(jeepney);
+                    return true;
+                } else if (item.getItemId() == 2) {
+                    if (listener != null) listener.onDeleteClick(jeepney);
+                    return true;
+                }
+                return false;
+            });
+            popup.show();
         });
     }
 
@@ -63,7 +77,6 @@ public class JeepneyAdapter extends RecyclerView.Adapter<JeepneyAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    // Search filter
     public void filter(String query) {
         jeepneyList.clear();
         if (query.isEmpty()) {
@@ -88,9 +101,9 @@ public class JeepneyAdapter extends RecyclerView.Adapter<JeepneyAdapter.ViewHold
             super(itemView);
             tvDriverName  = itemView.findViewById(R.id.tvItemDriverName);
             tvPlateNumber = itemView.findViewById(R.id.tvItemPlateNumber);
-            tvCapacity    = itemView.findViewById(R.id.tvItemCapacity);   // NEW
-            tvStatus      = itemView.findViewById(R.id.tvItemStatus);     // NEW
-            btnItemMenu   = itemView.findViewById(R.id.btnItemMenu);      // NEW
+            tvCapacity    = itemView.findViewById(R.id.tvItemCapacity);
+            tvStatus      = itemView.findViewById(R.id.tvItemStatus);
+            btnItemMenu   = itemView.findViewById(R.id.btnItemMenu);
         }
     }
 }
