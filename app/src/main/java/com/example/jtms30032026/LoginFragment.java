@@ -37,10 +37,9 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Updated IDs to match new fragment_login.xml
-        EditText etLoginUsername         = view.findViewById(R.id.etUsername);
+        EditText etLoginUsername          = view.findViewById(R.id.etUsername);
         TextInputEditText etLoginPassword = view.findViewById(R.id.etPassword);
-        Button btnLogin                  = view.findViewById(R.id.btnLogin);
+        Button btnLogin                   = view.findViewById(R.id.btnLogin);
 
         btnLogin.setOnClickListener(v -> {
             String username = etLoginUsername.getText().toString().trim();
@@ -48,28 +47,35 @@ public class LoginFragment extends Fragment {
                     ? etLoginPassword.getText().toString().trim() : "";
 
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(requireContext(), "Please enter username and password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Please enter username and password",
+                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Check admin credentials first
+            // ── Admin login ───────────────────────────────────────────────────
             if (username.equals("admin") && password.equals("admin123")) {
-                goToHome(true); // Admin login
+                SessionManager.getInstance().setLoggedInUsername("admin");
+                SessionManager.getInstance().setAdmin(true);
+                goToHome(true);
                 return;
             }
 
-            // Check staff credentials from database
+            // ── Staff login from DB ───────────────────────────────────────────
             RequestQueue queue = Volley.newRequestQueue(requireContext());
             String url = AppConfig.BASE_URL + "logincheck.php";
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                     response -> {
                         if (response.trim().equals("success")) {
-                            goToHome(false); // Staff login — no access to Staff menu
+                            SessionManager.getInstance().setLoggedInUsername(username);
+                            SessionManager.getInstance().setAdmin(false);
+                            goToHome(false);
                         } else if (response.trim().equals("invalid")) {
-                            Toast.makeText(requireContext(), "Invalid username or password", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), "Invalid username or password",
+                                    Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(requireContext(), "Error: " + response, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), "Error: " + response,
+                                    Toast.LENGTH_SHORT).show();
                         }
                     },
                     error -> Log.e("VolleyError", error.toString())
@@ -88,10 +94,7 @@ public class LoginFragment extends Fragment {
 
     private void goToHome(boolean isAdmin) {
         Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show();
-
-        // Pass isAdmin so MainActivity knows who logged in
         ((MainActivity) requireActivity()).showBottomNav(isAdmin);
-
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainerView, new HomeFragment())

@@ -259,6 +259,10 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
                 .setView(dialogView)
                 .create();
 
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
         Button btnCancel = dialogView.findViewById(R.id.btnCancelStaffEdit);
         Button btnSave   = dialogView.findViewById(R.id.btnSaveStaffEdit);
 

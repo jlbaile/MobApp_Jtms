@@ -207,6 +207,10 @@ public class JeepneyFragment extends Fragment implements JeepneyAdapter.OnItemCl
                 .setView(dialogView)
                 .create();
 
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
         Button btnCancel = dialogView.findViewById(R.id.btnCancelEdit);
         Button btnSave   = dialogView.findViewById(R.id.btnSaveEdit);
 

@@ -1,6 +1,8 @@
 package com.example.jtms30032026;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +32,11 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnTripActionLi
     private HomeAdapter adapter;
     private RecyclerView rvHome;
 
+    // ── Auto-refresh every 5 seconds ──────────────────────────────────────────
+    private Handler autoRefreshHandler;
+    private Runnable autoRefreshRunnable;
+    private static final int REFRESH_INTERVAL_MS = 5000;
+
     public HomeFragment() {}
 
     @Override
@@ -42,24 +49,66 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnTripActionLi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        rvHome = view.findViewById(R.id.rvHome);
+        rvHome   = view.findViewById(R.id.rvHome);
         homeList = new ArrayList<>();
-        adapter = new HomeAdapter(homeList, this); // Pass 'this' as listener
+        adapter  = new HomeAdapter(homeList, this);
         rvHome.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvHome.setAdapter(adapter);
 
-        fetchJeepneyStatus();
+        fetchHome();
+        startAutoRefresh();
     }
 
-    // This gets called by HomeAdapter when Depart or Return is clicked
+    // ── Start polling ─────────────────────────────────────────────────────────
+    private void startAutoRefresh() {
+        autoRefreshHandler  = new Handler(Looper.getMainLooper());
+        autoRefreshRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (isAdded() && !isDetached()) {
+                    fetchHome();
+                }
+                autoRefreshHandler.postDelayed(this, REFRESH_INTERVAL_MS);
+            }
+        };
+        autoRefreshHandler.postDelayed(autoRefreshRunnable, REFRESH_INTERVAL_MS);
+    }
+
+    // ── Pause polling when fragment goes off-screen ───────────────────────────
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (autoRefreshHandler != null) {
+            autoRefreshHandler.removeCallbacks(autoRefreshRunnable);
+        }
+    }
+
+    // ── Resume polling when fragment comes back on-screen ─────────────────────
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchHome(); // immediate fetch on resume
+        if (autoRefreshHandler != null) {
+            autoRefreshHandler.postDelayed(autoRefreshRunnable, REFRESH_INTERVAL_MS);
+        }
+    }
+
+    // ── Stop polling entirely when fragment is destroyed ──────────────────────
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (autoRefreshHandler != null) {
+            autoRefreshHandler.removeCallbacks(autoRefreshRunnable);
+        }
+    }
+
+    // ── Called by adapter after a depart/return action for immediate refresh ──
     @Override
     public void onRefreshNeeded() {
-        fetchJeepneyStatus();
+        fetchHome();
     }
 
-
-
-    private void fetchJeepneyStatus() {
+    private void fetchHome() {
         String url = AppConfig.BASE_URL + "homeread.php";
         RequestQueue queue = Volley.newRequestQueue(requireContext());
 
@@ -70,20 +119,20 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnTripActionLi
                         JSONArray jsonArray = new JSONArray(response);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject obj = jsonArray.getJSONObject(i);
-                            HomeModel jeepney = new HomeModel(
+                            homeList.add(new HomeModel(
                                     obj.getString("jeepney_id"),
                                     obj.getString("driver_name"),
                                     obj.getString("plate_number"),
-                                    obj.getString("capacity"),   // Add this
+                                    obj.getString("capacity"),
                                     obj.getString("status"),
                                     obj.getString("last_activity"),
                                     obj.getString("total_trips"),
-                                    obj.getString("active_trip_id"),
-                                    obj.has("total_fare") ? obj.getString("total_fare") : "0.00"
-                            );
-                            homeList.add(jeepney);
+                                    obj.getString("total_fare"),
+                                    obj.optString("active_trip_id", ""),
+                                    obj.optString("departed_by", "")
+                            ));
                         }
-                        adapter.updateList(new ArrayList<>(homeList));
+                        adapter.updateList(homeList);
                     } catch (Exception e) {
                         Log.e("JSONError", e.toString());
                     }
