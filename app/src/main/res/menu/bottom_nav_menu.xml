@@ -16,5 +16,8 @@
     <item android:title="Staff"
         android:icon="@drawable/staffvector"
         android:id="@+id/staff" />
-
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_person"
+        android:title="Profile" />
 </menu>

@@ -49,4 +49,5 @@ public class SessionManager {
         loggedInUsername = "";
         isAdmin          = false;
     }
+
 }

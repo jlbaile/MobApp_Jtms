@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(new StaffFragment());
             } else if (id == R.id.jeepney) {
                 replaceFragment(new JeepneyFragment());
+            } else if (id == R.id.profile) {
+                replaceFragment(new ProfileFragment());
             }
 
             return true;
@@ -51,10 +53,21 @@ public class MainActivity extends AppCompatActivity {
         // Hide Staff menu item if logged in as staff
         MenuItem staffMenuItem = binding.bottomNavigationView.getMenu().findItem(R.id.staff);
         staffMenuItem.setVisible(adminLoggedIn);
+
+        // Profile tab is always visible to everyone
+        // (no change needed — visible by default)
     }
 
     public void showBottomNav() {
         showBottomNav(false);
+    }
+
+    // Called from ProfileFragment on logout — hides nav and goes to login
+    public void showBottomNav(boolean show, boolean dummy) {
+        if (!show) {
+            binding.bottomNavigationView.setVisibility(android.view.View.GONE);
+            binding.bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
+        }
     }
 
     private void replaceFragment(Fragment fragment) {
