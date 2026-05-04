@@ -65,7 +65,7 @@ public class ProfileFragment extends Fragment {
         currentUsername = session.getLoggedInUsername();
 
         // DEBUG — remove after fixing
-        Toast.makeText(getContext(), "Username from session: '" + currentUsername + "'", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), "Username from session: '" + currentUsername + "'", Toast.LENGTH_LONG).show();
 
         // Admin is hardcoded — not in jeepney_staff table
         if (currentUsername.equalsIgnoreCase("admin")) {
@@ -79,7 +79,7 @@ public class ProfileFragment extends Fragment {
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     // DEBUG — shows raw PHP response
-                    Toast.makeText(getContext(), "Response: " + response, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), "Response: " + response, Toast.LENGTH_LONG).show();
                     try {
                         JSONObject obj = new JSONObject(response);
                         if (obj.getBoolean("success")) {
