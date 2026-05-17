@@ -86,7 +86,6 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
         tvStaffCount                 = view.findViewById(R.id.tvStaffCount);
         rvStaff                      = view.findViewById(R.id.rvStaff);
 
-        // Setup RecyclerView
         staffList = new ArrayList<>();
         adapter = new StaffAdapter(staffList, this);
         rvStaff.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -158,15 +157,33 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
             StringRequest stringRequest = new StringRequest(Request.Method.POST,
                     AppConfig.BASE_URL + "staffcreate.php",
                     response -> {
-                        if (response.trim().equals("success")) {
-                            Toast.makeText(requireContext(), "Staff Added Successfully", Toast.LENGTH_SHORT).show();
-                            etFirstName.setText("");
-                            etLastName.setText("");
-                            etUsername.setText("");
-                            etPassword.setText("");
-                            fetchStaff();
-                        } else {
-                            Toast.makeText(requireContext(), "Failed: " + response, Toast.LENGTH_SHORT).show();
+                        try {
+                            // FIX 1: staffcreate.php returns JSON — parse it instead of plain text compare
+                            JSONObject json = new JSONObject(response.trim());
+                            if (json.optBoolean("success", false)) {
+                                Toast.makeText(requireContext(), "Staff Added Successfully", Toast.LENGTH_SHORT).show();
+                                // Clear all fields after successful add
+                                etFirstName.setText("");
+                                etLastName.setText("");
+                                etUsername.setText("");
+                                etPassword.setText("");
+                                fetchStaff();
+                            } else {
+                                String msg = json.optString("message", "Failed to add staff");
+                                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            // Fallback: if response is still plain text "success"
+                            if (response.trim().equals("success")) {
+                                Toast.makeText(requireContext(), "Staff Added Successfully", Toast.LENGTH_SHORT).show();
+                                etFirstName.setText("");
+                                etLastName.setText("");
+                                etUsername.setText("");
+                                etPassword.setText("");
+                                fetchStaff();
+                            } else {
+                                Toast.makeText(requireContext(), "Failed: " + response, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     },
                     error -> Log.e("VolleyError", error.toString())
@@ -212,10 +229,9 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
     // ─── Delete Request ───────────────────────────────────────────────────────
 
     private void deleteStaff(String staffId) {
-        String url = AppConfig.BASE_URL + "staffdelete.php";
         RequestQueue queue = Volley.newRequestQueue(requireContext());
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                AppConfig.BASE_URL + "staffdelete.php",
                 response -> {
                     if (response.trim().equals("success")) {
                         Toast.makeText(requireContext(), "Staff Deleted", Toast.LENGTH_SHORT).show();
@@ -253,7 +269,10 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
         etEditFname.setText(staff.getStaff_fname());
         etEditLname.setText(staff.getStaff_lname());
         etEditUsername.setText(staff.getStaff_username());
-        etEditPassword.setText(staff.getStaff_password());
+        // FIX 2: Do NOT pre-fill the password field with the bcrypt hash.
+        // Leave it blank — admin only types a new password if they want to change it.
+        etEditPassword.setHint("Leave blank to keep current password");
+        etEditPassword.setText("");
 
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
@@ -275,10 +294,12 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
             String newPassword = etEditPassword.getText() != null
                     ? etEditPassword.getText().toString().trim() : "";
 
-            if (newFname.isEmpty() || newLname.isEmpty() || newUsername.isEmpty() || newPassword.isEmpty()) {
-                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            if (newFname.isEmpty() || newLname.isEmpty() || newUsername.isEmpty()) {
+                Toast.makeText(requireContext(), "Please fill in name and username", Toast.LENGTH_SHORT).show();
                 return;
             }
+            // Password is optional — pass empty string if not changed,
+            // staffupdate.php will skip updating it when empty
             updateStaff(staff.getStaff_id(), newFname, newLname, newUsername, newPassword);
             dialog.dismiss();
         });
@@ -312,7 +333,7 @@ public class StaffFragment extends Fragment implements StaffAdapter.OnItemClickL
                 params.put("staff_fname",    fname);
                 params.put("staff_lname",    lname);
                 params.put("staff_username", username);
-                params.put("staff_password", password);
+                params.put("staff_password", password); // empty string = keep current password
                 return params;
             }
         };
